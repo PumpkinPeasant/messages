@@ -8,13 +8,15 @@ const newMessage = ref('')
 
 function sendMessage() {
   if (newMessage.value.trim()) {
-    messages.value.push({message: newMessage.value, isDeleted: false, createdAt: new Date().toLocaleString('ru-RU', {
+    messages.value.push({
+      message: newMessage.value, isDeleted: false, createdAt: new Date().toLocaleString('ru-RU', {
         day: '2-digit',
         month: 'short',
         year: 'numeric',
         hour: '2-digit',
         minute: '2-digit'
-      })})
+      })
+    })
     clearInput();
   }
 }
@@ -73,11 +75,7 @@ watch(messages, () => {
       <div class="border rounded p-3 mb-4" style="height: 400px; overflow-y: auto; background-color: #f8f9fa;">
         <div v-for="(msg, index) in messages" :key="index"
              class="d-flex gap-2 align-items-center mb-1">
-          <button
-              :style="{ visibility: msg.isDeleted ? 'visible' : 'hidden' }"
-              type="button"
-              class="btn-close btn-sm"
-          />
+        <span :style="{ visibility: msg.isDeleted ? 'visible' : 'hidden' }">×</span>
           <span class="d-flex flex-column">
             <span>
               {{ msg.message }}
@@ -89,7 +87,7 @@ watch(messages, () => {
         </div>
       </div>
 
-      <div class="d-flex gap-2">
+      <div class="actions d-flex gap-2">
         <input @keydown.enter="sendMessage" type="text" class="form-control" v-model="newMessage"
                placeholder="Новое сообщение"/>
         <button class="btn btn-success px-4" @click="sendMessage">Отправить</button>
@@ -97,3 +95,26 @@ watch(messages, () => {
     </div>
   </main>
 </template>
+
+<style scoped>
+.actions > button {
+  background: linear-gradient(to right, #00694f, #17c589);
+  border: none;
+}
+
+.actions > button:hover {
+  background: white;
+  color: #00694f;
+  border: 2px solid #00694f;
+}
+
+@media screen and (width < 600px) {
+  .actions {
+    flex-wrap: wrap;
+  }
+
+  .actions > button {
+    width: 100%;
+  }
+}
+</style>
